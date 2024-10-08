@@ -1,0 +1,45 @@
+import speech_recognition as sr
+import pyttsx3
+
+# Initialize the speech recognition engine
+r = sr.Recognizer()
+
+# Initialize the text-to-speech engine
+engine = pyttsx3.init()
+
+def voice_assistant():
+    print("Welcome to the voice assistant!")
+    print("You can ask me anything, and I'll do my best to respond.")
+
+    while True:
+        # Use the microphone as the audio source
+        with sr.Microphone() as source:
+            print("Listening...")
+            audio = r.listen(source)
+
+        try:
+            # Recognize the speech and convert it to text
+            text = r.recognize_google(audio, language="en-US")
+            print("You said:", text)
+
+            # Respond to the user's query
+            if "hello" in text.lower():
+                engine.say("Hello! How can I assist you today?")
+            elif "what is your name" in text.lower():
+                engine.say("My name is Voice Assistant. I'm here to help you with any questions or tasks you may have.")
+            elif "goodbye" in text.lower():
+                engine.say("Goodbye! It was nice chatting with you.")
+                break
+            else:
+                engine.say("I didn't understand that. Can you please rephrase your question or request?")
+
+            # Play the response
+            engine.runAndWait()
+
+        except sr.UnknownValueError:
+            print("Sorry, I didn't understand what you said.")
+        except sr.RequestError as e:
+            print("Error:", e)
+
+if __name__ == "__main__":
+    voice_assistant()
